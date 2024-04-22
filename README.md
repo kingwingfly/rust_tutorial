@@ -1,5 +1,5 @@
 # rust_tutorial
-My notes after reading lots of tutorials and documents about Rust in Chinese.
+My notes in Chinese after reading lots of tutorials and documents about Rust.
 
 
 
