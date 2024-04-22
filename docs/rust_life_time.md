@@ -492,10 +492,10 @@ where
     V: Default,
 {
     match map.get_mut(&key) {
-        Some(value) => value,	// value: 'm => line 7's &mut map: 'm
+        Some(value) => value,	// return 'm, so line 7's `&mut map: 'm`
         None => {
             map.insert(key.clone(), V::default());
-            map.get_mut(&key).unwrap()	// 'm => line 11's &mut map: 'm
+            map.get_mut(&key).unwrap()	// return 'm, so line 11's `&mut map: 'm`
         }
     }
 }
@@ -549,7 +549,7 @@ fn main() {
 }
 ```
 
-注意到`get_str`的输入中没有生命周期，只有输出中有生命周期。于是在编译器看来，`'a`可以不受限制地被推断尾任何生命周期。
+注意到`get_str`的输入中没有生命周期，只有输出中有生命周期。于是在编译器看来，`'a`可以不受限制地被推断为任何生命周期。
 
 一般认为，大于`'static`的生命周期是没有意义的。但在Rust中，你不能创建 `&'static &'a str`，因为不能`'static`地引用``&'a str`，后者的生命周期不够长。有了 `'unbounded`之后，也许可以玩些花活，但一般把它视为`'static`也无伤大雅。
 
@@ -643,7 +643,7 @@ Q2：什么是“顺变”？
 
 型变包含顺变、逆变、协变，英文分别为，covariance、contra variance、invariant
 
-在举个例子：
+再举个例子：
 
 ```rust
 fn assign<T>(input: &mut T, val: T) {
@@ -664,7 +664,7 @@ In `assign`, we are setting the `hello` reference to point to `world`. But then 
 
 The fact is that we cannot assume that `&mut &'static str` and `&mut &'b str` are compatible. This means that `&mut &'static str` **cannot** be a _subtype_ of `&mut &'b str`, even if `'static` is a subtype of `'b`.
 
-用前面的话来说，假如能够将`&mut &'static str`降级为`&mut &'b str`，也就可以将可变引用指向的`&'static str`变成`&b str`，细想一下其中的危险。所以，我们认为`&mut &'static str`不是`&mut &'b str`的子类型。
+用前面的话来说，假如能够将`&mut &'static str`降级为`&mut &'b str`，也就可以将可变引用指向的`&'static str`变成`&'b str`，细想一下其中的危险。所以，我们认为`&mut &'static str`不是`&mut &'b str`的子类型。
 
 因此，`&mut`是协变（invariant）的。
 
@@ -693,6 +693,8 @@ The fact is that we cannot assume that `&mut &'static str` and `&mut &'b str` ar
 以`fn(T) -> U`为例，当`T1: T2`时，`fn(T2) -> U: fn(T1) -> U`，为逆变；当`U1: U2`时，`fn(T) -> U1: fn(T) -> U2`，为顺变。
 
 因为`T1: T2`，所以`fn(T1) -> U`对参数要求更严格，适用性比`fn(T2) -> U`低，所以前者是父类型，因此是逆变。
+
+也因为这是唯一一个逆变的情形，所以用型变来理解借用检查实用性不高。
 
 现在，我们可以再次细想前面的例子：
 
