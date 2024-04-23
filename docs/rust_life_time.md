@@ -363,7 +363,7 @@ fn choose_first<'a: 'b, 'b>(first: &'a i32, _: &'b i32) -> &'b i32 {
 
 如何创建一个 ``&'static T`？
 
-1. `'static`关键字
+1. `static`关键字
 
 2. `Box::leak`
 
