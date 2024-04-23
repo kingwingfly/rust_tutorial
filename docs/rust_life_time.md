@@ -427,7 +427,7 @@ data.push(4);	// == Vec::push(&mut data, 4);
 println!("{}", x);
 ```
 
-显然，这违反借用规则。Rustonomicon 想用这个例子说明：编译器并不懂 “代码”，它只是发现在 immutable ref 的生命周期中，出现了一个 mutable ref 而已。
+显然，这违反借用规则。Rustonomicon 想用这个例子说明：编译器并不“懂”代码，它只是发现在 immutable ref 的生命周期中，出现了一个 mutable ref 而已。
 
 ---
 
