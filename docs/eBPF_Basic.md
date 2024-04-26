@@ -25,3 +25,5 @@ BPF 程序需要编译，由高级语言编译为 bytecode，由内核中的虚�
 已有的 BPF 工具：
 
 [![img](assets/bcc_tracing_tools.png)](http://www.brendangregg.com/Perf/bcc_tracing_tools.png)
+
+After reading [Kevin.K's tutorial](https://kbknapp.dev/ebpf-part-ii/index.html), I think it is so brilliant that there's nothing more to do in this article. So, that's all.
