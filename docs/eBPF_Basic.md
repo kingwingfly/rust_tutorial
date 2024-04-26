@@ -4,6 +4,7 @@
 
 - [官方文档](https://ebpf.io/what-is-ebpf/#the-power-of-programmability)
 - [Learn eBPF Tracing: Tutorial and Examples](https://www.brendangregg.com/blog/2019-01-01/learn-ebpf-tracing.html)
+- [Kevin.K's tutorial](https://kbknapp.dev/ebpf-part-ii/index.html)
 
 ## 正文
 
