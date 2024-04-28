@@ -566,7 +566,7 @@ struct Closure<F> {
 }
 
 impl<F> Closure<F>
-    where F: Fn(&'? (u8, u16)) -> &'? u8, // Here absolutely needs lifetime
+    where F: Fn(&'? (u8, u16)) -> &'? u8, // We may assume here needs lifetime
 {
     fn call(&self) -> &u8 {
         (self.func)(&self.data)
@@ -574,7 +574,7 @@ impl<F> Closure<F>
 }
 ```
 
-第7行的函数签名不符合消除规则，需要生命周期标注，但我们甚至没有可用生命周期参数。
+不妨假设第7行的函数签名不符合消除规则，需要生命周期标注，但我们甚至没有可用生命周期参数。
 
 用心感受一下，`Fn`是函数或闭包的特征，而函数或闭包自然是哪里需要就能用在哪里，那么，
 
@@ -594,7 +594,12 @@ where for<'a> F: Fn(&'a (u8, u16)) -> &'a u8,
 where F: for<'a> Fn(&'a (u8, u16)) -> &'a u8,
 ```
 
-就像是魔法一样。
+但更推荐前一种写法，因为有时，我们需要这样：
+
+```rust
+where
+    for<'a, 'b> &'a mut F: ...
+```
 
 ---
 
@@ -625,7 +630,7 @@ fn main() {
 
 Q：为什么可以降级？
 
-A：因为借用是顺变（covariance）的，已知`'static: 'world`，故`&'static str: &'world str`。
+A：因为不可变引用是顺变（covariance）的，已知`'static: 'world`，故`&'static str: &'world str`。
 
 这里有两个疑惑：
 
@@ -633,7 +638,7 @@ Q1：结论里的冒号是什么意思？
 
 A：`&'static str: &'world str`，读作：`&'static str`是`&'world str`的子类型。
 
-作为初学者，也许有点反直觉：能使用`&'world str`的地方一定能使用`&'static str`的，反之则不一定。`&'static str`明明比`&'world str`强，为什么是个“子”呢？因为儿子比父亲强。
+作为初学者，也许有点反直觉：能使用`&'world str`的地方一定能使用`&'static str`的，反之则不一定。`&'static str`明明比`&'world str`强，为什么是个“子”呢？答曰：儿子比父亲强。
 
 Q2：什么是“顺变”？
 
@@ -641,9 +646,36 @@ Q2：什么是“顺变”？
 
 在本例中，`Sub='static` `Sup='world`，`F`表示取不可变引用的操作，检查发现的确是顺变的。
 
-型变包含顺变、逆变、协变，英文分别为，covariance、contra variance、invariant
+型变包含顺变、逆变、协变，英文分别为，covariance、contra variance、invariant.
 
-再举个例子：
+定义如下：
+
+- `F` is **covariant** if `F<Sub>` is a subtype of `F<Super>` (the subtype property is passed through)
+- `F` is **contravariant** if `F<Super>` is a subtype of `F<Sub>` (the subtype property is "inverted")
+- `F` is **invariant** otherwise (no subtyping relationship exists)
+
+举个 invariant 的例子：
+
+```rust
+fn f1(s: &str) { ... }
+fn f2(s: &mut str) { ... }
+
+let s1 = "hello";
+{
+    let s2 = "world";
+    fx(...);    // 第一处
+    assert_eq!(s1, "hello");
+}
+fx(...);    // 第二处
+```
+
+在上面的代码中，`&'static str: &'b str`，即`s1: s2`，即能用`s2`的地方一定能用`s1`。
+
+若`fx`是`f1`，在第一处中，无论传入`&s1`还是`&s2`，对后续均无影响；在第二处，无法传入`&s2`；即可以用`&s2`的地方一定能用`&s1`，反之不成立，所以`&`是顺变(covariant)；
+
+若`fx`是`f2`，在第一处，若传入`&mut s2`，无影响，若传入`&mut s1`，则`assert_eq!`**可能**会失败；在第二处，无法传入`&mut s2`；即`&mut s1`和`&mut s2`没有明确的型变关系，所以`&mut`是 invariant。
+
+下面这个例子来自 Rustonomicon：
 
 ```rust
 fn assign<T>(input: &mut T, val: T) {
@@ -660,19 +692,9 @@ fn main() {
 }
 ```
 
-In `assign`, we are setting the `hello` reference to point to `world`. But then `world` goes out of scope, before the later use of `hello` in the `println!`, leading to a classic use-after-free bug.
+In `assign`, we are setting the `hello` reference to point to `world`. But then `world` goes out of scope, before the later use of `hello` in the `println!`, leading to a classic use-after-free bug. （这段话解释了报错原因）
 
-The fact is that we cannot assume that `&mut &'static str` and `&mut &'b str` are compatible. This means that `&mut &'static str` **cannot** be a _subtype_ of `&mut &'b str`, even if `'static` is a subtype of `'b`.
-
-用前面的话来说，假如能够将`&mut &'static str`降级为`&mut &'b str`，也就可以将可变引用指向的`&'static str`变成`&'b str`，细想一下其中的危险。所以，我们认为`&mut &'static str`不是`&mut &'b str`的子类型。
-
-因此，`&mut`是协变（invariant）的。
-
-总结：
-
-- `F` is **covariant** if `F<Sub>` is a subtype of `F<Super>` (the subtype property is passed through)
-- `F` is **contravariant** if `F<Super>` is a subtype of `F<Sub>` (the subtype property is "inverted")
-- `F` is **invariant** otherwise (no subtyping relationship exists)
+The fact is that we cannot assume that `&mut &'static str` and `&mut &'b str` are compatible. This means that `&mut &'static str` **cannot** be a _subtype_ of `&mut &'b str`, even if `'static` is a subtype of `'b`. （这段话大意为`&mut &'static str`与`&mut &'b str`没有明确的关系）
 
 常见型变与子类型：
 
@@ -685,8 +707,8 @@ The fact is that we cannot assume that `&mut &'static str` and `&mut &'b str` ar
 | `UnsafeCell<T>` |           |     invariant     |           |
 | `Cell<T>`       |           |     invariant     |           |
 | `fn(T) -> U`    |           | **contra**variant | covariant |
-| `*const T`      |           |     covariant     |           |
-| `*mut T`        |           |     invariant     |           |
+| `\*const T`     |           |     covariant     |           |
+| `\*mut T`       |           |     invariant     |           |
 
 如何理解这个表：
 
@@ -711,7 +733,7 @@ let mut hello: &'static str = "hello";
 println!("{hello}"); // use after free
 ```
 
-`&mut`是 invariant 的，不能发生隐式的降级，故 `T`被推断为`&'static str`，但`&world`不符合要求，编译器报错。
+`&mut`是 invariant 的，不能发生隐式的降级，故`T`被推断为`&'static str`，但`&world`不符合要求，编译器报错。
 
 ---
 
