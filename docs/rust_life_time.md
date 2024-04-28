@@ -660,9 +660,9 @@ Q2：什么是“顺变”？
 fn f1(s: &str) { ... }
 fn f2(s: &mut str) { ... }
 
-let s1 = "hello";
+let mut s1 = "hello";
 {
-    let s2 = "world";
+    let mut s2 = "world";
     fx(...);    // 第一处
     assert_eq!(s1, "hello");
 }
