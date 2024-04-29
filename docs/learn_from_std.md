@@ -1,0 +1,1 @@
+[rfc 1236](https://github.com/rust-lang/rfcs/blob/master/text/1236-stabilize-catch-panic.md)
