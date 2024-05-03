@@ -654,27 +654,6 @@ Q2：什么是“顺变”？
 - `F` is **contravariant** if `F<Super>` is a subtype of `F<Sub>` (the subtype property is "inverted")
 - `F` is **invariant** otherwise (no subtyping relationship exists)
 
-举个 invariant 的例子：
-
-```rust
-fn f1(s: &str) { ... }
-fn f2(s: &mut str) { ... }
-
-let mut s1 = "hello";
-{
-    let mut s2 = "world";
-    fx(...);    // 第一处
-    assert_eq!(s1, "hello");
-}
-fx(...);    // 第二处
-```
-
-在上面的代码中，`&'static str: &'b str`，即`s1: s2`，即能用`s2`的地方一定能用`s1`。
-
-若`fx`是`f1`，在第一处中，无论传入`&s1`还是`&s2`，对后续均无影响；在第二处，无法传入`&s2`；即可以用`&s2`的地方一定能用`&s1`，反之不成立，所以`&`是顺变(covariant)；
-
-若`fx`是`f2`，在第一处，若传入`&mut s2`，无影响，若传入`&mut s1`，则`assert_eq!`**可能**会失败；在第二处，无法传入`&mut s2`；即`&mut s1`和`&mut s2`没有明确的型变关系，所以`&mut`是 invariant。
-
 下面这个例子来自 Rustonomicon：
 
 ```rust
