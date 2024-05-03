@@ -646,7 +646,7 @@ Q2：什么是“顺变”？
 
 在本例中，`Sub='static` `Sup='world`，`F`表示取不可变引用的操作，检查发现的确是顺变的。
 
-型变包含顺变、逆变、协变，英文分别为，covariance、contra variance、invariant.
+型变包含顺变、逆变、协变，英文分别为，covariance、contra variance、invariance.
 
 定义如下：
 
