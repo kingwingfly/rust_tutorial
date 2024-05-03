@@ -503,6 +503,8 @@ where
 
 根据`get_default`和`HashMap::get_mut`的函数签名，`map`和返回值的生命周期都是`'m`。因此，第7行和第11行均可变引用了`map`，且生命周期为`'m`，无法编译。
 
+> 如果你想实现`get_default`，可以查看`HashMap::entry`的文档。
+
 ---
 
 省略规则之前已经讲过，Rustonomicon 多了一些例子：
