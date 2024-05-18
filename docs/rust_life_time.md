@@ -722,7 +722,9 @@ println!("{hello}"); // use after free
 
 [An alias-based formulation of the borrow checker](https://smallcultfollowing.com/babysteps/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/)是在[Inside Rust Blog](https://blog.rust-lang.org/inside-rust/)的文章[Polonius update](https://blog.rust-lang.org/inside-rust/2023/10/06/polonius-update.html)中提到的。描述了当前Rust编译器中借用检查器的实现。
 
-这篇比较难读：https://smallcultfollowing.com/babysteps/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
+这几篇比较难读：https://smallcultfollowing.com/babysteps/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
+
+https://rust-lang.github.io/polonius/
 
 解决了之前提到的一个问题：
 
