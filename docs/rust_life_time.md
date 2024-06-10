@@ -772,6 +772,12 @@ fn main() {
 
 感兴趣的同学可以阅读上面提到的两篇文章，新的借用检查器看起来是在顺利的开发中。
 
+其它
+
+https://rust-lang.github.io/rfcs/2094-nll.html
+
+https://smallcultfollowing.com/babysteps/blog/2024/06/02/the-borrow-checker-within/
+
 ## 总结
 
 很酷，累……
