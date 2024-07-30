@@ -1,0 +1,8 @@
+[workspace]
+members = ["examples"]
+resolver = "2"
+
+[workspace.package]
+name = "rust_tutorial"
+edition = "2021"
+version = "0.0.1"

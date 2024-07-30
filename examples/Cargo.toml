@@ -1,0 +1,17 @@
+[package]
+name = "examples"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+loom = { version = "0.7", features = ["checkpoint"] }
+
+[[example]]
+name = "atomic"
+path = "atomic.rs"
+required-features = ["atomic"]
+
+
+[features]
+default = ["atomic"]
+atomic = []

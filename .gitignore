@@ -15,3 +15,5 @@ Cargo.lock
 
 # For macOS
 .DS_Store
+
+loom.json
