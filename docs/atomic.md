@@ -147,7 +147,7 @@ INFO loom::model: Completed in 105 iterations
 
 No assert fails, nice.
 
-## Actually semantics of Ordering
+## Actual semantics of Ordering
 
 Noticing many `Relexed` still remained in the code, how can we assert it’s right without tools like `loom`?
 
