@@ -245,5 +245,5 @@ What magic result happened with those two changes?
    let y = y.load(Ordering::Relaxed);
    assert!(y == 4 || y == 8 || y == 6, "y = {}", y);
    // line4 can be seen by line8, since release--the before stay before, the after are free
-   // However, line4 can never happen before line2
+   // However, line4 never really happens in advance, it's just in observer's eyes. 
    ```
