@@ -155,8 +155,8 @@ So we have to properly understand `Release` and `Acquire`.
 
 Actually, every atomic op has its Ordering,
 
-- `Release`, ops in the same thread before me stay before me.
-- `Acquire`, ops in the same thread after me stay after me.
+- `Release`, ops in the same thread before me stay before me in others' eyes.
+- `Acquire`, ops in the same thread after me stay after me in others' eyes.
 
 More concrete, “ops before me stay before me”:
 
