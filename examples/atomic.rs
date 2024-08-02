@@ -24,6 +24,6 @@ fn main() {
         jh1.join().unwrap();
         jh2.join().unwrap();
         let y = y.load(Ordering::Relaxed);
-        assert!(y == 4 || y == 8 || y == 3 || y == 6, "y = {}", y);
+        assert!(y == 4 || y == 8 || y == 6, "y = {}", y);
     })
 }

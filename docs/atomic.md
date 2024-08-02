@@ -166,7 +166,7 @@ More concrete, “ops before me stay before me”:
 
 - Synchronization happens
 
-- In thread2’s eyes, storing y=3 stays before storing x=1. 
+- In thread2’s eyes, storing y=3 stays before storing x=1.
 
 
 The same as acquire, "ops after me stay after me":
@@ -174,7 +174,7 @@ The same as acquire, "ops after me stay after me":
 - In thread2, we load x in ordering acquire.
 - In thread1, we store x=1 in ordering release.
 - Synchronization happens
-- In thread1’s eyes, loading y\=\=3 stays after loading x\=\=1. 
+- In thread1’s eyes, loading y\=\=3 stays after loading x\=\=1.
 
 Let’s copy code down here:
 
@@ -224,7 +224,7 @@ What magic result happened with those two changes?
        }
    });
    ...
-   assert!(y == 3 || y == 6, "y = {}", y); 
+   assert!(y == 3 || y == 6, "y = {}", y);
    // Within the same thread, line2 and line3 follow the `program order within a single thread`
    // line3 won't happen before line2
    ```
@@ -243,7 +243,7 @@ What magic result happened with those two changes?
    });
    ...
    let y = y.load(Ordering::Relaxed);
-   assert!(y == 4 || y == 8 || y == 3 || y == 6, "y = {}", y);
+   assert!(y == 4 || y == 8 || y == 6, "y = {}", y);
    // line4 can be seen by line8, since release--the before stay before, the after are free
    // However, line4 can never happen before line2
    ```
