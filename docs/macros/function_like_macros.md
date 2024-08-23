@@ -1,11 +1,3 @@
----
-aliases: [Macros]
-tags:
-  - note
-  - rust
-time built: 2023-03-24 14:23  
-last change: 2023-03-28 08:28  
----
 本笔记总结自[The Little Book of Rust Macros](https://github.com/veykril/tlborm/)
 
 我对其中的案例有所简化
@@ -276,7 +268,7 @@ impl Iterator for Fib {
             let new = {
                 let a = & self.mem;
                 let n = self.mem.len();
-                a[n-2] + a[n-1]                
+                a[n-2] + a[n-1]
             };
             let mut temp = new.clone();
             for i in (0..2).rev() {
@@ -359,7 +351,7 @@ macro_rules! recurrence {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn macro_test() {
         let mut fib = recurrence![a[n]: u64 = 0, 1, ..., a[n-1] + a[n-2]];
@@ -563,7 +555,7 @@ macro_rules! recurrence {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn macro_test2() {
         let mut fib = recurrence!(f[i]: i32 = 1, 1, 3;...; f[i-3]+f[i-2]+f[i-1]);
@@ -577,7 +569,7 @@ mod tests {
         }
         assert_eq!(fib.next().unwrap(), 7473);
 	}
-}	
+}
 ```
 
 ## 导出宏
@@ -585,7 +577,7 @@ mod tests {
 ```rust
 #[macro_export]
 macro_rules! count_exprs {...
-    
+
 #[macro_export]
 macro_rules! recurrence {
     (...) => {
@@ -763,4 +755,3 @@ mod tests {
 }
 
 ```
-
