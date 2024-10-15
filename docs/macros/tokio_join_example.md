@@ -23,3 +23,5 @@ macro_rules! join {
 `join!` 宏的实现是一个递归宏，它的目的是将多个异步任务组合成一个异步任务。
 
 一般的，若一个函数式宏具有某些不希望用户直接调用的 matcher，约定俗成地，可以使用 `@` 作为 matcher 的前缀。例如，`join!` 宏的递归入口。
+
+[howtocodeit](https://www.howtocodeit.com/articles/writing-production-rust-macros-with-macro-rules)，这篇文章中例举并分析了tokio::join!的实现，值得一读。
