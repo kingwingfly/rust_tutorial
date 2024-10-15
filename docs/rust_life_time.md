@@ -415,7 +415,7 @@ That basically implies that we're going to find a str somewhere in the scope the
 
 即，需要一个`str`outlives`u32`，但这个`str`只能在函数体中产生，这是不可能的（因为即使产生，也会被自动 Drop 掉）。正确的做法是返回一个 String。
 
-> `String` 是一个结构体，其中，一个field是指向 `str` 的指针，一个是 `str` 的长度。`str` 实际是`[u8]`，编译器忽略其大小，即 Rust 中的`?Sized`。其实，`Vec`也是一样的。
+> `String` 是一个结构体，其中，一个field是指向 `str` 的指针，一个是 `str` 的长度，以及容量。`str` 实际是`[u8]`，编译器忽略其大小，即 Rust 中的`?Sized`。其实，`Vec`也是一样的。
 
 还有个例子：
 
