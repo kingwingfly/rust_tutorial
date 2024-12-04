@@ -1,4 +1,5 @@
 https://marabos.nl/atomics/memory-ordering.html
+
 This book is hugely recommended.
 
 # Atomic
